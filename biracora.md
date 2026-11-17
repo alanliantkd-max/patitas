@@ -106,3 +106,31 @@ no sabe quién es su penúltimo, así que la única forma de encontrarlo es
 empezar desde la cabeza y recorrer hasta llegar al nodo anterior a la cola.
 Por eso es O(n), aunque tengamos la referencia `cola`: sirve para agregar
 al final, pero no para retroceder.
+
+# Reto 4: Patitas v0.1 - Historiales completos
+
+## Diagrama de la estructura
+
+```
+RegistroClinico
+  historiales (Map)
+    "Lola" → cabeza → [02/02 Vacunación] → [15/03 Control] → [20/05 Limpieza] ← cola
+    "Toby" → cabeza → [10/01 Cojera] → [12/01 Radiografía] → [05/04 Vacunación] ← cola
+    "Mía"  → cabeza → [18/02 Esterilización] → [25/02 Control posquirúrgico] ← cola
+```
+
+## Tabla comparativa: ListaEnlazada vs arreglo
+
+| Operación | ListaEnlazada | Arreglo | Por qué |
+|---|---|---|---|
+| Agregar al final | O(1) | O(1) | La lista usa `cola`; el arreglo usa `push` |
+| Agregar al inicio | O(1) | O(n) | El arreglo debe mover todos los elementos una posición |
+| Acceder a la atención número k | O(k) ≈ O(n) | O(1) | La lista recorre desde la cabeza; el arreglo salta al índice |
+| Buscar por condición | O(n) | O(n) | Ambos revisan elemento por elemento |
+| Eliminar la primera | O(1) | O(n) | La lista solo mueve `cabeza`; el arreglo desplaza todo a la izquierda |
+
+## Conclusión
+
+Un historial clínico crece casi siempre al final y se recorre completo, y ahí
+la lista enlazada rinde bien. Si se consultara mucho "la atención número k",
+un arreglo sería mejor.
