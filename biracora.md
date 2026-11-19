@@ -134,3 +134,4 @@ RegistroClinico
 Un historial clínico crece casi siempre al final y se recorre completo, y ahí
 la lista enlazada rinde bien. Si se consultara mucho "la atención número k",
 un arreglo sería mejor.
+
