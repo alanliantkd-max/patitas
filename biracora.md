@@ -135,3 +135,25 @@ Un historial clínico crece casi siempre al final y se recorre completo, y ahí
 la lista enlazada rinde bien. Si se consultara mucho "la atención número k",
 un arreglo sería mejor.
 
+## Comparación: Cola vs arreglo (100.000 turnos)
+
+| Operación | Tiempo medido |
+|---|---|
+| Cola: encolar 100.000 | ___ ms |
+| Cola: desencolar 100.000 | ___ ms |
+| Arreglo: push 100.000 | ___ ms |
+| Arreglo: shift 100.000 | ___ ms |
+
+## Complejidad
+
+| Operación | Cola (nodos) | Arreglo | Por qué |
+|---|---|---|---|
+| Encolar / push | O(1) | O(1) | La cola usa `final`; el arreglo agrega en su última posición |
+| Desencolar / shift | O(1) | O(n) | La cola solo mueve `frente`; `shift` debe correr todos los elementos una posición a la izquierda |
+
+## Diferencia
+
+Desencolar en la cola solo cambia la referencia `frente` al siguiente nodo, sin
+tocar el resto. `shift()` en un arreglo, en teoría, tiene que mover cada
+elemento restante una posición, por lo que su costo crece con el tamaño (O(n)).
+En mi medición, [explica aquí qué viste: cuál fue más rápido y por cuánto].
