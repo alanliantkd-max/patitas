@@ -167,3 +167,45 @@ Resultado: coincidió / no coincidió.
 - Hipótesis: Rocky llegó a las 9:00 justo cuando se liberaba el consultorio
   y mi simulación lo registró después de llamar al siguiente.
 - Corrección: registrar las llegadas (`llegada <= tiempo`) antes de llamar.
+
+# Reto 8: Patitas v0.2 - Recepción completa
+
+## Tabla de estructuras
+
+| Estructura | Principio | Uso en Patitas | Operaciones principales |
+|---|---|---|---|
+| Nodo | Secuencial | Pieza básica: guarda un dato y apunta al siguiente | Crear: O(1) |
+| ListaEnlazada | Secuencial | Historial de atenciones de cada mascota | agregarAlFinal O(1), agregarAlInicio O(1), buscar O(n), insertarDespuesDe O(n), eliminar O(n) |
+| RegistroClinico | Secuencial (Map de listas) | Un historial por mascota, buscado por nombre | registrarAtencion O(1), obtenerHistorial O(1) |
+| Cola | FIFO | Sala de espera: el primero que llega es el primero atendido | encolar O(1), desencolar O(1) |
+| Recepcion | FIFO con prioridad (dos colas) | Urgencias antes que consultas generales | registrarLlegada O(1), llamarSiguiente O(1) |
+| Pila | LIFO | Guarda las acciones para deshacer y rehacer | apilar O(1), desapilar O(1), verTope O(1) |
+| Editor | LIFO (dos pilas) | Registra atenciones y permite corregir errores | agregar O(1), deshacer y rehacer O(n) en el peor caso |
+
+Nota: `deshacer` y `rehacer` son O(n) en el peor caso porque, al quitar
+una atención de la lista, `eliminar` debe recorrer los nodos hasta encontrarla.
+Las operaciones de las pilas en sí son O(1).
+
+## Cálculo manual de la simulación
+
+(Es el del reto 6: orden Toby, Luna, Kira, Rocky, Max, Simón, Nala.
+Promedios: urgencias 8,33 min, generales 58,75 min.)
+
+## Traza de la corrección del error
+
+Las pilas se leen de la base al tope.
+
+| Momento | Historial de Nala | Historial de Kira | Pila deshacer | Pila rehacer |
+|---|---|---|---|---|
+| Antes de atender a Kira | vacío | vacío | [+Toby, +Luna] | [ ] |
+| Error: se registra Kira en Nala | [Kira] | vacío | [+Toby, +Luna, +Kira→Nala] | [ ] |
+| deshacer | vacío | vacío | [+Toby, +Luna] | [+Kira→Nala] |
+| Registro correcto en Kira | vacío | [Kira] | [+Toby, +Luna, +Kira] | [ ] |
+
+Al registrar de nuevo, la pila de rehacer se vació: la acción equivocada
+ya no se puede rehacer, como pasa en cualquier editor.
+
+## Comparación manual vs programa
+
+Resultado: coincidió / no coincidió. (Si hubo diferencia, anota síntoma,
+hipótesis y corrección.)
