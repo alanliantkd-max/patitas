@@ -157,3 +157,13 @@ Desencolar en la cola solo cambia la referencia `frente` al siguiente nodo, sin
 tocar el resto. `shift()` en un arreglo, en teoría, tiene que mover cada
 elemento restante una posición, por lo que su costo crece con el tamaño (O(n)).
 En mi medición, [explica aquí qué viste: cuál fue más rápido y por cuánto].
+
+## Comparación manual vs programa
+
+Resultado: coincidió / no coincidió.
+
+(Solo si hubo diferencia)
+- Síntoma: el programa atendió a Max antes que a Rocky.
+- Hipótesis: Rocky llegó a las 9:00 justo cuando se liberaba el consultorio
+  y mi simulación lo registró después de llamar al siguiente.
+- Corrección: registrar las llegadas (`llegada <= tiempo`) antes de llamar.
