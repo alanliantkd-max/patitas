@@ -266,3 +266,23 @@ contarServicios(Cirugías)             total = 0
 
 Es el mismo principio LIFO de la `Pila` del reto 7: la última llamada
 en entrar es la primera en terminar.
+
+# Reto 10: Búsquedas y paquetes recursivos
+
+## Error común: descuento repetido
+
+Si el descuento del 10 % se aplica en cada llamada recursiva, cada servicio
+se descuenta una vez por cada nivel que lo contiene.
+
+Con "Cirugías" (780.000 sin descuento):
+- Esterilización: 630.000 × 0,9 = 567.000
+- Limpieza dental: 150.000 × 0,9 = 135.000
+- Cirugías: (567.000 + 135.000) × 0,9 = 631.800  ← INCORRECTO
+
+Resultado correcto: 780.000 × 0,9 = 702.000.
+
+Por qué es incorrecto: el descuento se aplicó dos veces (0,9 × 0,9 = 0,81),
+o sea 19 % de descuento y no 10 %.
+
+Solución: separar la suma recursiva (`sumaServicios`, sin descuento) de la
+función principal (`precioPaquete`), que aplica el 10 % una sola vez al final.

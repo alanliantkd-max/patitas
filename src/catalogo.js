@@ -90,4 +90,109 @@ function profundidad(categoria) {
   return 1 + masProfunda; // 1 por este nivel
 }
 
-module.exports = { catalogo, contarServicios, listarCatalogo, profundidad };
+function buscarServicio(categoria, nombre) {
+  // 1. Buscar entre los servicios de esta categoría
+  for (const servicio of categoria.servicios) {
+    if (servicio.nombre === nombre) {
+      return servicio; // lo encontré: retorno temprano
+    }
+  }
+
+  // 2. Si no está aquí, buscar en cada subcategoría
+  for (const sub of categoria.subcategorias) {
+    const encontrado = buscarServicio(sub, nombre);
+    if (encontrado !== null) {
+      return encontrado; // si apareció, no sigo con las demás subcategorías
+    }
+  }
+
+  return null; // no está en esta rama
+}
+
+function buscarServicio(categoria, nombre) {
+  // 1. Buscar entre los servicios de esta categoría
+  for (const servicio of categoria.servicios) {
+    if (servicio.nombre === nombre) {
+      return servicio; // lo encontré: retorno temprano
+    }
+  }
+
+  // 2. Si no está aquí, buscar en cada subcategoría
+  for (const sub of categoria.subcategorias) {
+    const encontrado = buscarServicio(sub, nombre);
+    if (encontrado !== null) {
+      return encontrado; // si apareció, no sigo con las demás subcategorías
+    }
+  }
+
+  return null; // no está en esta rama
+}
+
+function rutaDeServicio(categoria, nombre) {
+  // Caso: el servicio está en esta categoría
+  for (const servicio of categoria.servicios) {
+    if (servicio.nombre === nombre) {
+      return [categoria.nombre, servicio.nombre];
+    }
+  }
+
+  // Caso: está en alguna subcategoría
+  for (const sub of categoria.subcategorias) {
+    const ruta = rutaDeServicio(sub, nombre);
+    if (ruta !== null) {
+      return [categoria.nombre, ...ruta]; // pongo mi nombre al inicio de la ruta
+    }
+  }
+
+  return null;
+}
+
+// Auxiliar recursiva: suma todos los precios, SIN descuento
+function sumaServicios(categoria) {
+  let total = 0;
+
+  for (const servicio of categoria.servicios) {
+    total += servicio.precio;
+  }
+  for (const sub of categoria.subcategorias) {
+    total += sumaServicios(sub);
+  }
+
+  return total;
+}
+
+// Principal: aplica el 10 % de descuento una sola vez, al final
+function precioPaquete(categoria) {
+  const total = sumaServicios(categoria);
+  return (total * 90) / 100;
+}
+
+// Auxiliar recursiva: agrega al arreglo los servicios que estén en el rango
+function recolectarEnRango(categoria, min, max, resultado) {
+  for (const servicio of categoria.servicios) {
+    if (servicio.precio >= min && servicio.precio <= max) {
+      resultado.push(servicio);
+    }
+  }
+  for (const sub of categoria.subcategorias) {
+    recolectarEnRango(sub, min, max, resultado);
+  }
+}
+
+// Principal: crea el arreglo y lo devuelve
+function serviciosEnRango(categoria, min, max) {
+  const resultado = [];
+  recolectarEnRango(categoria, min, max, resultado);
+  return resultado;
+}
+
+module.exports = {
+  catalogo,
+  contarServicios,
+  listarCatalogo,
+  profundidad,
+  buscarServicio,
+  rutaDeServicio,
+  precioPaquete,
+  serviciosEnRango,
+};
