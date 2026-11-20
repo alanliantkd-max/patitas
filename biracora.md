@@ -209,3 +209,60 @@ ya no se puede rehacer, como pasa en cualquier editor.
 
 Resultado: coincidió / no coincidió. (Si hubo diferencia, anota síntoma,
 hipótesis y corrección.)
+
+# Reto 9: Catálogo anidado (recursión)
+
+## Diseño de las funciones
+
+### contarServicios(categoria)
+- Caso base: una categoría sin subcategorías. El `for` no entra y devuelve
+  solo sus propios servicios (implícito).
+- Reducción: se llama a la función con cada subcategoría, que es un
+  catálogo más pequeño.
+- Combinación: servicios propios + suma de lo que devuelve cada subcategoría.
+
+### listarCatalogo(categoria, nivel)
+- Caso base: una categoría sin subcategorías. Imprime su nombre y servicios y
+  el `for` no entra.
+- Reducción: se llama con cada subcategoría y con nivel + 1.
+- Combinación: no devuelve nada. Imprime su nombre, sus servicios y luego lo
+  que imprimen sus subcategorías, con más sangría.
+
+### profundidad(categoria)
+- Caso base: una categoría sin subcategorías tiene profundidad 1.
+- Reducción: se llama con cada subcategoría.
+- Combinación: 1 + la mayor profundidad entre sus subcategorías.
+
+## Traza de contarServicios(Cirugías)
+
+Cirugías tiene 0 servicios propios y dos subcategorías.
+
+```
+contarServicios(Cirugías)             total = 0
+  │
+  ├─ contarServicios(Esterilización)  total = 2, sin subcategorías
+  │     devuelve 2
+  │
+  │  total = 0 + 2 = 2
+  │
+  ├─ contarServicios(Limpieza dental) total = 1, sin subcategorías
+  │     devuelve 1
+  │
+  │  total = 2 + 1 = 3
+  │
+  devuelve 3
+```
+
+## Pila de llamadas (el tope está arriba)
+
+| Momento | Pila de llamadas |
+|---|---|
+| 1. Empieza | Cirugías |
+| 2. Llama a Esterilización | Esterilización, Cirugías |
+| 3. Esterilización termina (devuelve 2) | Cirugías |
+| 4. Llama a Limpieza dental | Limpieza dental, Cirugías |
+| 5. Limpieza dental termina (devuelve 1) | Cirugías |
+| 6. Cirugías termina (devuelve 3) | vacía |
+
+Es el mismo principio LIFO de la `Pila` del reto 7: la última llamada
+en entrar es la primera en terminar.
